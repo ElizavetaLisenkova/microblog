@@ -1,3 +1,5 @@
+import pymysql
+
 class Configuration(object):
-    # SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://root:1@localhost/test1'
-    pass
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:Htyg-htyg1$@localhost/test1'
