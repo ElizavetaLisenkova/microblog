@@ -6,11 +6,14 @@ from .forms import PostForm
 from app import db
 from flask import redirect, url_for
 
+from flask_security import login_required
+
 
 posts = Blueprint('posts', __name__, template_folder='templates')
 
 
 @posts.route('/create', methods=['POST', 'GET'])
+@login_required
 def create_post():
     if request.method == 'POST':
         title = request.form['title']
@@ -25,6 +28,22 @@ def create_post():
         return redirect(url_for('posts.index'))
     form = PostForm()
     return render_template('posts/create_post.html', form=form)
+
+
+@posts.route('/<slug>/edit/', methods=['POST', 'GET'])
+@login_required
+def edit_post(slug):
+    post = Post.query.filter(Post.slug==slug).first()
+    if request.method == 'POST':
+        form = PostForm(formdata=request.form, obj=post)
+        form.populate_obj(post)
+        db.session.commit()
+
+        return redirect(url_for('posts.post_detail', slug=post.slug))
+
+    form = PostForm(obj=post)
+    return render_template('posts/edit_post.html', post=post, form=form)
+
 
 
 @posts.route('/')

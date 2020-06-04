@@ -2,18 +2,49 @@
 
 {% block  title %}
     Blueprint index page
-{% endblock  %} 
+{% endblock  %}
 
 {% block  content_title %}
-    Посты
-{% endblock  %} 
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <p class="text-center font-weight-normal">Посты</p>
+            </div>
+        </div>
+    </div>
+{% endblock  %}
 
 {% block  content %}
 
-    {% for post in posts %}
-        <p>
-            <a href="{{ url_for('posts.post_detail', slug=post.slug) }}">{{ post.title }}</a>
-        </p>
-    {% endfor %}
+{% for post in posts %}
+<div class="d-flex justify-content-center">
+    <div class="card mb-3 shadow p-3 mb-5 bg-white rounded col md-offset-4 " style="max-width: 540px;">
+        <div class="row">
+            <div class="col-md-4 col">
+                <img src="https://mykaleidoscope.ru/uploads/posts/2019-12/1575766848_18-19.jpg" class="card-img"
+                    alt="...">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body col-md-offset-4">
 
-{% endblock  %} 
+                    <h5 class="card-title">
+                        <a href="{{ url_for('posts.post_detail', slug=post.slug) }}">
+                            <p class="font-weight-normal">{{ post.title }}</p>
+                        </a>
+                    </h5>
+
+                    <p class="card-text">{{post.body}}</p>
+                    <p class="card-text"><small class="text-muted">Изменен {{ post.created}}</small></p>
+
+                    {% if current_user.has_role('admin') %}
+                        <p class="card-text"><small class="text-muted">
+                        <a class="nav-link" href="{{ url_for('posts.edit_post', slug=post.slug)}}"><img src="https://img2.freepng.ru/20180420/bqq/kisspng-computer-icons-writing-fonts-vector-5ada38828ce8b3.0081536415242507545772.jpg" width="20" height="20" alt=""></a></small></p>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock  %}
